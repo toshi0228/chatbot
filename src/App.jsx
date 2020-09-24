@@ -14,8 +14,6 @@ const App = () => {
   const initAnswer = initDataset.answers;
 
   useEffect(() => {
-    // setAnswes(initAnswer);
-    // console.log(dataset);
     selectAnswer(initAnswer, currentId);
   }, []);
 
@@ -29,6 +27,7 @@ const App = () => {
     });
     setChats(_chats);
     setCurrentId(currentId);
+
     setAnswes(dataset[nextQuestionId].answers);
   };
 
@@ -37,18 +36,25 @@ const App = () => {
       case nextQuestionId === "init":
         displayNextQuestion(nextQuestionId);
         break;
+
+      case /^https:*/.test(nextQuestionId):
+        const a = document.createElement("a");
+        a.href = nextQuestionId;
+        a.target = "blank";
+        a.click();
+        break;
+
       default:
         const chat = {
-          text: initDataset.question,
-          type: "question",
+          text: selectAnswer,
+          type: "ansewer",
         };
 
         const _chats = chats;
-
         _chats.push(chat);
-        setChats(_chats);
 
-        displayNextQuestion(nextQuestionId);
+        setChats(_chats);
+        setTimeout(() => displayNextQuestion(nextQuestionId), 1000);
         break;
     }
   };
